@@ -40,7 +40,9 @@ function columnGeneration(V)
     return vec(value.(a))
 end
 
-
+c_bar_list = []
+primal_values_list = []
+dual_values_list = []
 
 for i in 1:iterMax
     N = size(A,2)
@@ -53,9 +55,18 @@ for i in 1:iterMax
     @objective(LP, Min, sum(x) )
 
     optimize!(LP)
+
+    primal_value = value.(sum(x))
+    push!(primal_values_list, primal_value)
+
     V = [dual(demand[i]) for i in 1:m]
     column = columnGeneration(V)
     c_bar = 1 - V' * column
+
+    dual_value = b * V
+    push!(dual_values_list, dual_value)
+
+    push!(c_bar_list, c_bar)
 
     if c_bar >= reducedCostThreshold
         break
@@ -79,3 +90,17 @@ print("\n\nA: ", A)
 
 
 
+print("\n\nIteration    Primal/dual value     lower bound     upper bound     reduced cost\n")
+
+for k in 1:length(c_bar_list)
+    print(k)
+    print(" ")
+    print(primal_values_list[k])
+    print(" ")
+    print(primal_values_list[k] / (1 - c_bar_list[k]))
+    print(" ")
+    print(primal_values_list[k])
+    print(" ")
+    print(c_bar_list[k])
+    print("\n")
+end
