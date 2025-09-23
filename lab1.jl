@@ -3,7 +3,8 @@ using JuMP, HiGHS
 m = 10
 L = 100
 M = 3
-l = [11 13 17 23 37 41 51 61 71 79]
+l = [11 13 17 23 37 41 51 61 71 79
+]
 
 iterMax = 20
 reducedCostThreshold = -1e-8
